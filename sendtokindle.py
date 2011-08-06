@@ -27,6 +27,10 @@ def sizeof_fmt(num):
     return num
 
 
+class SendKindleException(StandardError):
+    pass
+
+
 class SendKindle(object):
     """Takes a SMTP configuration, can send files to the Amazon
     Kindle delivery service.
@@ -64,12 +68,17 @@ class SendKindle(object):
 
         # send email
         klass = smtplib.SMTP_SSL if self.smtp_type == 'tls' else smtplib.SMTP
-        smtp = klass(host=self.smtp_host, port=self.smtp_port)
-        if self.smtp_type == 'starttls':
-            smtp.starttls()
-        smtp.login(self.smtp_username, self.smtp_password)
-        smtp.sendmail(self.user_email, recipient, msg)
-        smtp.close()
+        try:
+            smtp = klass(host=self.smtp_host, port=self.smtp_port)
+            if self.smtp_type == 'starttls':
+                smtp.starttls()
+            if self.smtp_username:
+                smtp.login(self.smtp_username, self.smtp_password)
+            smtp.sendmail(self.user_email, recipient, msg)
+            smtp.close()
+        except smtplib.SMTPException, e:
+            print e
+            raise SendKindleException(e)
 
     def get_attachment(self, file_path):
         """Get file as MIMEBase message"""
@@ -103,10 +112,14 @@ class SendThread(threading.Thread):
             import time
             time.sleep(5)
         else:
-            self.send_kindle_instance.send_email(*self.args, **self.kwargs)
+            error = False
+            try:
+                self.send_kindle_instance.send_mail(*self.args, **self.kwargs)
+            except SendKindleException, e:
+                error = e
 
         if self.on_done:
-            self.on_done()
+            self.on_done(error)
 
 
 class ConfigureWindow(object):
@@ -325,14 +338,29 @@ class MainWindow(object):
     def _window_destroy(self, widget):
         self.application.stop()
 
-    def _current_op_done(self):
-        # File has been sent; show a notification and exit.
-        n = Notify.Notification.new(
-            "Sent to Kindle",
-            'The document "%s" has been sent.' % self.filename,
-            "dialog-ok")
-        n.show()
-        self.application.stop()
+    def _current_op_done(self, error):
+        if not error:
+            # File has been sent; show a notification and exit.
+            n = Notify.Notification.new(
+                "Sent to Kindle",
+                'The document "%s" has been sent.' % self.filename,
+                "dialog-ok")
+            n.show()
+            self.application.stop()
+        else:
+            # File has not been sent. Show an error
+            n = Notify.Notification.new(
+                "Failed to send to Kindle",
+                'The document "%s" could not be sent: %s' % (
+                    self.filename, error),
+                "dialog-error")
+            n.show()
+
+            # Put the indicator in error mode, the user may have
+            # missed the notification
+            self.indicator.set_error(error)
+
+        self.current_op = None
 
     def _config_changed(self, app, settings):
         self.update_ui()
@@ -560,8 +588,8 @@ class Indicator(object):
     """Encapsulates the Ubuntu App indicator.
     """
 
-    def __init__(self, application):
-        self.application = application
+    def __init__(self, main_window):
+        self.main_window = main_window
         self._create_indicator()
 
     def _create_indicator(self):
@@ -574,26 +602,68 @@ class Indicator(object):
 
         # Attach the required menu
         self.menu = Gtk.Menu()
+
         self.abort_menuitem = item = Gtk.MenuItem()
         item.connect("activate", self._abort_item_activate)
+        item.show()
+        self.menu.append(item)
+
+        # TODO: It would be nicer if this were not a submenu, but
+        # clicking the indicator itself shows the error. Apparently
+        # this might be possible in AppIndicator3.
+        self.error_menuitem = item = Gtk.MenuItem()
+        item.connect("activate", self._error_item_activate)
         item.show()
         self.menu.append(item)
 
         self.menu.show()
         ind.set_menu(self.menu)
 
+    def _abort_item_activate(self, widget):
+        self.main_window.abort_upload()
+
+    def _error_item_activate(self, widget):
+        self.main_window.show()
+        self.hide()
+        md = Gtk.MessageDialog(
+            self.main_window.window,
+            Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.MessageType.ERROR,
+            Gtk.ButtonsType.OK,
+            "An error occurred trying to send the documents: %s" % self.error)
+        md.set_title('Failed to send to Kindle')
+        md.run()
+        md.destroy()
+
+    def set_error(self, error):
+        """Set indicator in error mode (or normal mode if error=None).
+
+        Error mode represents state after a failed send.
+        """
+        #self.abort_menuitem.set_visible(not bool(error))
+        #self.error_menuitem.set_visible(bool(error))
+        self.error = error
+        if error:
+            self.abort_menuitem.hide()
+            self.error_menuitem.show()
+        else:
+            self.abort_menuitem.show()
+            self.error_menuitem.hide()
+
     def show(self):
         """Show the indicator, refresh the menu to current state.
         """
         self.abort_menuitem.set_label(
-            'Abort sending "%s"' % self.application.filename)
+            'Abort sending "%s"' % self.main_window.filename)
+        # There are a number of strange bugs I ran across with changing
+        # the menu item visibility and text dynamically. Setting this
+        # as early as possible helps.
+        self.error_menuitem.set_label(
+            'Error sending "%s"' % self.main_window.filename)
+        self.set_error(None)
         self.ind.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
     def hide(self):
         self.ind.set_status(AppIndicator.IndicatorStatus.PASSIVE)
-
-    def _abort_item_activate(self, widget):
-        self.application.abort_upload()
 
 
 def main():
