@@ -42,7 +42,8 @@ class SendKindle(object):
     def __init__(self, settings):
         self.user_email = settings['user']['email']
         self.smtp_host = settings['smtp']['host']
-        self.smtp_port = settings['smtp']['port']
+        # smtplib breaks on unicode port string
+        self.smtp_port = str(settings['smtp']['port']) or 25
         self.smtp_username = settings['smtp']['username']
         self.smtp_password = settings['smtp']['password']
         self.smtp_type = settings['smtp']['type']
