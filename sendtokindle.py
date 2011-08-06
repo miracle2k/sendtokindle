@@ -107,6 +107,11 @@ class SendThread(threading.Thread):
         self.kwargs = kwargs
         self.on_done = None
 
+        # There's really not good way to abort a smptlib send operation,
+        # as far as I know. Using a daemon thread allows us to abort
+        # by shutting down the main thread.
+        self.daemon = True
+
     def run(self):
         if os.environ.get('STK_SLEEP', False) == '1':
             # For debugging purposes.
@@ -121,6 +126,10 @@ class SendThread(threading.Thread):
 
         if self.on_done:
             self.on_done(error)
+
+    def stop(self):
+        # Nothing we can do really.
+        pass
 
 
 class ConfigureWindow(object):
@@ -436,8 +445,10 @@ class MainWindow(object):
     def abort_upload(self):
         """Abort the current upload operation.
         """
-        self.current_op.stop()  # XXX
-        self.current_op.join(timeout=5)
+        if self._current_op:
+            self.current_op.stop()
+            # Give the thread a bit of time to complete
+            self.current_op.join(timeout=2)
         self.application.stop()
 
     def show(self):
