@@ -1,0 +1,11 @@
+See if we can speak with the Amazon Servers directly, so no SMTP config 
+is required. Presumably Amazon will not allow us to conn
+
+Support for multiple devices.
+
+Support sending multiple files in one go.
+
+Integrate into Gnome "Send to" menu.
+
+Put the sending code in a daemon so that simultaneously sent files will 
+lead to a single app indicator icon only.
