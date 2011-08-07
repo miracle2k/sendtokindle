@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 # coding: utf8
+"""
+Graphical Send to Kindle Utility.
+
+Created 2011 by Michael Elsdörfer <michael@elsdoerfer.com>.
+
+Licensed under GNU AGPL 3.
+"""
+
 import os
 import re
 import sys
