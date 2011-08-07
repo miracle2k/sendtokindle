@@ -27,6 +27,19 @@ def sizeof_fmt(num):
     return num
 
 
+def get_layout_file_path(name):
+    """Return path to layout file; check running from source,
+    or globally installed scenarios.
+    """
+    local = path.join(path.dirname(__file__), 'data', 'gui', name)
+    if path.isfile(local):
+        return local
+    system = path.join('/usr', 'local', 'share', 'sendtokindle', 'gui', name)
+    if path.isfile(system):
+        return system
+    raise RuntimeError("Layout file not found: %s" % name)
+
+
 class SendKindleException(StandardError):
     pass
 
@@ -140,7 +153,7 @@ class ConfigureWindow(object):
     """Encapsulates the configure window.
     """
 
-    LAYOUT_FILE = path.join(path.dirname(__file__), 'glade', 'configure.glade')
+    LAYOUT_FILE = get_layout_file_path('configure.ui')
 
     def __init__(self, application):
         self.application = application
@@ -282,7 +295,7 @@ class ConfigureWindow(object):
 
 class MainWindow(object):
 
-    LAYOUT_FILE = path.join(path.dirname(__file__), 'glade', 'main.glade')
+    LAYOUT_FILE = get_layout_file_path('main.ui')
 
     def __init__(self, application):
         self.application = application
