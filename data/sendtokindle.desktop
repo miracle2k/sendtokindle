@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Categories=Utility;TextTools;GTK;GNOME;
+Name=Send To Kindle
+Comment=Send documents to your Kindle
+Exec=sendtokindle "%f"
+Icon=sendtokindle
+Type=Application
+MimeType=application/x-mobipocket-ebook;application/pdf;application/msword;text/plain;text/html;text/rtf;application/xhtml+xml;image/jpeg;image/png;image/gif;image/bmp;
+
