@@ -284,7 +284,8 @@ class ConfigureWindow(object):
             if msg:
                 widget.set_property('secondary-icon-name', 'gtk-dialog-warning')
                 widget.set_property('secondary-icon-tooltip-text', msg)
-                widget.grab_focus()
+                if not typing:
+                    widget.grab_focus()
             else:
                 widget.set_property('secondary-icon-name', None)
                 widget.set_property('secondary-icon-tooltip-text', None)
