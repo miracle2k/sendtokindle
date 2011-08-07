@@ -658,6 +658,9 @@ class Indicator(object):
         #self.abort_menuitem.set_visible(not bool(error))
         #self.error_menuitem.set_visible(bool(error))
         self.error = error
+        # On Natty, sometimes this works, sometimes a menu item
+        # is not shown when it should (usually the error item).
+        # Sometimes there is segmentation fault.
         if error:
             self.abort_menuitem.hide()
             self.error_menuitem.show()
