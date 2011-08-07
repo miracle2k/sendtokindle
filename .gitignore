@@ -1,5 +1,11 @@
 *.pyc
 /BRANCH_TODO
 
+# Distutils
+/data/sendtokindle
+/dist/
+/build/
+/MANIFEST
+
 # PyCharm
 /.idea/
