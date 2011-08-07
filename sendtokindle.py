@@ -677,6 +677,8 @@ class Indicator(object):
         if error:
             self.abort_menuitem.hide()
             self.error_menuitem.show()
+
+            self.ind.set_status(AppIndicator.IndicatorStatus.ATTENTION)
         else:
             self.abort_menuitem.show()
             self.error_menuitem.hide()
