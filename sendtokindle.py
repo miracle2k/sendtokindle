@@ -25,6 +25,9 @@ import threading
 from gi.repository import Gtk, Gdk, Gio, GObject, AppIndicator, Notify
 
 
+__version__ = ('0', '5', '0')
+
+
 def sizeof_fmt(num):
     """Format number of bytes in human readable form.
 

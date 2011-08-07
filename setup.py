@@ -2,8 +2,23 @@
 # coding: utf8
 from distutils.core import setup
 from glob import glob
+import os
 import shutil
 
+
+# Figure out the version.
+import re
+here = os.path.dirname(os.path.abspath(__file__))
+fp = open(os.path.join(here, 'sendtokindle.py'))
+match = re.search(r'__version__ = (\(.*?\))', fp.read())
+if match:
+    version = eval(match.group(1))
+else:
+    raise Exception("Cannot find version in __init__.py")
+fp.close()
+
+
+# So we can deploy the file with file extension.
 shutil.copyfile('sendtokindle.py', 'data/sendtokindle')
 
 data_files = [
@@ -18,6 +33,7 @@ data_files = [
 
 setup(
     name="sendtokindle",
+    version=".".join(map(str, version)),
     author="Michael Eldsdörfer",
     author_email="michale@elsdoerfer.com",
     url="https://elsdoerfer.com/sendtokindle",
