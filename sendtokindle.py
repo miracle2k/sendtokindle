@@ -623,11 +623,11 @@ class Indicator(object):
 
     def _create_indicator(self):
         self.ind = ind = AppIndicator.Indicator.new(
-            "send-to-kindle",
-            "indicator-messages",
+            "sendtokindle",
+            "sendtokindle-indicator",
             AppIndicator.IndicatorCategory.APPLICATION_STATUS)
         ind.set_status(AppIndicator.IndicatorStatus.PASSIVE)
-        ind.set_attention_icon ("indicator-messages-new")
+        ind.set_attention_icon ("sendtokindle-indicator-error")
 
         # Attach the required menu
         self.menu = Gtk.Menu()
