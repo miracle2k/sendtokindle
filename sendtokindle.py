@@ -59,7 +59,11 @@ class SendKindle(object):
 
         # attach files
         for file_path in files:
-            msg.attach(self.get_attachment(file_path))
+            try:
+                msg.attach(self.get_attachment(file_path))
+            except IOError, e:
+                print e
+                raise SendKindleException(e)
 
         # convert MIME message to string
         fp = StringIO()
