@@ -1,0 +1,22 @@
+Icon Sources
+------------
+
+
+sendtokindle.png
+    Axialias/Icons2/Bright Icons/Objects/Book Blue.png
+
+pay.png
+    Axialias/Free Icons/Axialis-Round-Web2-Orange-Png/Png/48x48/Currency Dollar.png
+
+indicator-*.png
+    Axialias/Icons2/Pack 9 - iPhone Tab Bar Icons/X2 Resolution/Book 2.png
+
+    - Scaled to 58px height, then enlarged canvas to 64x64
+    - Used the Curve tool to make the icon monochrome
+    - Using the Gimp "Map -> Color Exchange" to make final colors:
+        ubuntu-mono-dark:
+            default: #dfdbd2
+            error:   #df382c
+        ubunto-mono-light:
+            default: #3c3c3c
+            error:   #e24a3f
