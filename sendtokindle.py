@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# coding: utf8
 import os
 import re
 import sys
