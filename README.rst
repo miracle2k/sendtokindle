@@ -3,7 +3,8 @@ Send To Kindle
 
 A utility to send documents to your Kindle via the Internet.
 
-Currently only works on Ubuntu.
+Currently only works on Ubuntu, because it uses an app indicator.
+Patches to supported other distributions are welcome.
 
 See http://elsdoerfer.com/sendtokindle for screenshots.
 
