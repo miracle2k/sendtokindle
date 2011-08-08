@@ -6,7 +6,9 @@ A utility to send documents to your Kindle via the Internet.
 Currently only works on Ubuntu, because it uses an app indicator.
 Patches to supported other distributions are welcome.
 
-See http://elsdoerfer.com/sendtokindle for screenshots.
+.. image:: http://elsdoerfer.name/media/images/sendtokindle/merged.png
+
+See http://elsdoerfer.com/sendtokindle for more screenshots.
 
 
 Installation
