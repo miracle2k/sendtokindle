@@ -25,7 +25,7 @@ import threading
 from gi.repository import Gtk, Gdk, Gio, GObject, AppIndicator, Notify
 
 
-__version__ = ('0', '5', '0')
+__version__ = ('0', '5', '1')
 
 
 def sizeof_fmt(num):
