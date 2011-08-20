@@ -6,10 +6,19 @@ import os
 import shutil
 
 
+# So we can deploy the file with file extension.
+# Kind of a hack, setuptools would make this a lot
+# easier. Or we could install sendtokindle.py to
+# site-packages, and have a script wrapper.
+here = os.path.dirname(os.path.abspath(__file__))
+if os.path.exists(os.path.join(here, 'sendtokindle.py')):
+    shutil.copyfile(os.path.join(here, 'sendtokindle.py'), 
+                    os.path.join(here, 'data/sendtokindle'))
+
 # Figure out the version.
 import re
 here = os.path.dirname(os.path.abspath(__file__))
-fp = open(os.path.join(here, 'sendtokindle.py'))
+fp = open(os.path.join(here, 'data', 'sendtokindle'))
 match = re.search(r'__version__ = (\(.*?\))', fp.read())
 if match:
     version = eval(match.group(1))
@@ -17,9 +26,6 @@ else:
     raise Exception("Cannot find version in __init__.py")
 fp.close()
 
-
-# So we can deploy the file with file extension.
-shutil.copyfile('sendtokindle.py', 'data/sendtokindle')
 
 data_files = [
     ('share/icons/hicolor/256x256/apps', ['data/icons/hicolor/sendtokindle.png']),
