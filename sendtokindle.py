@@ -476,7 +476,7 @@ class MainWindow(object):
     def abort_upload(self):
         """Abort the current upload operation.
         """
-        if self._current_op:
+        if self.current_op:
             self.current_op.stop()
             # Give the thread a bit of time to complete
             self.current_op.join(timeout=2)
