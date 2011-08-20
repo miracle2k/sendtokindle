@@ -1,0 +1,6 @@
+0.5.1 (2011-08-20)
+    - Fixed "Abort" functionality.
+    - Fixed Python package installation.
+
+0.5.0 (2011-08-08)
+    - Initial release.
