@@ -28,6 +28,13 @@ from gi.repository import Gtk, Gdk, Gio, GObject, AppIndicator, Notify
 __version__ = ('0', '5', '1')
 
 
+# TODO: This does't make much sense, since libindicator doesn't seem
+# to respect it; so we really need to install our icons system-wide,
+# even for development.
+#p =  path.normpath(path.abspath(path.join(path.dirname(__file__), 'data', 'icons')))
+#Gtk.IconTheme.get_default().prepend_search_path(p)
+
+
 def sizeof_fmt(num):
     """Format number of bytes in human readable form.
 
