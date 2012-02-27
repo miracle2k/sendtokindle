@@ -51,12 +51,17 @@ def get_layout_file_path(name):
     """Return path to layout file; check running from source,
     or globally installed scenarios.
     """
-    local = path.join(path.dirname(__file__), 'data', 'gui', name)
-    if path.isfile(local):
-        return local
-    system = path.join('/usr', 'local', 'share', 'sendtokindle', 'gui', name)
-    if path.isfile(system):
-        return system
+    script = path.abspath(sys.argv[0])
+    if script.startswith('/usr/local'):
+        filename= path.join('/usr', 'local', 'share', 'sendtokindle', 'gui', name)
+    elif script.startswith('/usr'):
+        filename= path.join('/usr', 'share', 'sendtokindle', 'gui', name)
+    else:
+        # assume running from dev
+        filename = path.join(path.dirname(__file__), 'data', 'gui', name)
+
+    if path.isfile(filename):
+        return filename
     raise RuntimeError("Layout file not found: %s" % name)
 
 
