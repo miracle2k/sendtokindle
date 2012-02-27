@@ -25,7 +25,7 @@ import threading
 from gi.repository import Gtk, Gdk, Gio, GObject, AppIndicator, Notify
 
 
-__version__ = ('0', '5', '1')
+__version__ = ('0', '5', '2')
 
 
 # TODO: This does't make much sense, since libindicator doesn't seem
