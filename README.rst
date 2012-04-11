@@ -14,9 +14,11 @@ See http://elsdoerfer.com/sendtokindle for more screenshots.
 Installation
 ============
 
-You can install it via ``easy_install``:
+You currently must install via ``pip`` (``easy_install`` does not place the
+data files in the correct place):
 
-     $ easy_install sendtokindle
+     $ sudo easy_install pip
+     $ sudo pip install sendtokindle
 
 It will add itself to the Gnome Main Menu, as well as the "Open With"
 menu of supported file types.
