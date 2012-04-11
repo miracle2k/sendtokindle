@@ -22,7 +22,11 @@ from email.MIMEMultipart import MIMEMultipart
 import smtplib
 import threading
 
-from gi.repository import Gtk, Gdk, Gio, GObject, AppIndicator, Notify
+from gi.repository import Gtk, Gdk, Gio, GObject, Notify
+try:
+    from gi.repository import AppIndicator3 as AppIndicator
+except:
+    from gi.repository import AppIndicator
 
 
 __version__ = ('0', '5', '2')
