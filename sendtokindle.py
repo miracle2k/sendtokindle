@@ -29,7 +29,7 @@ except:
     from gi.repository import AppIndicator
 
 
-__version__ = ('0', '5', '2')
+__version__ = ('0', '5', '9')
 
 
 # TODO: This does't make much sense, since libindicator doesn't seem
